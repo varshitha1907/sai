@@ -1,0 +1,30 @@
+%{
+#include <stdio.h>
+%}
+
+%%
+
+<!--.*?-->      { /* Ignore comments */ }    // Match HTML comments (optional)
+<\s*([a-zA-Z][a-zA-Z0-9]*)\s*[^>]*>   { printf("Opening tag: %s\n", yytext); }  // Match opening tags
+</\s*([a-zA-Z][a-zA-Z0-9]*)\s*[^>]*>  { printf("Closing tag: %s\n", yytext); }  // Match closing tags
+
+%%
+
+int main(int argc, char **argv) {
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s <source_file>\n", argv[0]);
+        return 1;
+    }
+
+    FILE *file = fopen(argv[1], "r");
+    if (file == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
+
+    yyin = file;  // Set the input stream for Lex
+    yylex();      // Start Lexing
+
+    fclose(file);
+    return 0;
+}

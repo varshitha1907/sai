@@ -1,0 +1,26 @@
+%{
+#include <stdio.h>
+#include <string.h>
+
+int count = 0;  // Word frequency counter
+char target[] = "hello"; // Word to count
+%}
+
+%%
+
+hello   { count++; }
+
+.|\n    { /* Ignore other characters */ }
+
+%%
+
+int main() {
+    printf("Enter a sentence (Ctrl+D to stop):\n");
+    yylex();
+    printf("The word '%s' appears %d times.\n", target, count);
+    return 0;
+}
+
+int yywrap() {
+    return 1;
+}
