@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+// Function to check for single-line and multi-line comments
+void lexicalAnalyzer(char *input) {
+    int i = 0;
+    
+    while (input[i] != '\0') {
+        // Check for single-line comment starting with "//"
+        if (input[i] == '/' && input[i + 1] == '/') {
+            printf("Single-line comment detected: ");
+            // Print the rest of the line as comment
+            printf("%s\n", &input[i]);
+            return;  // Rest of the line is a comment, no need to continue
+        }
+        
+        // Check for multi-line comment starting with "/*"
+        if (input[i] == '/' && input[i + 1] == '*') {
+            printf("Multi-line comment detected: ");
+            // Print everything starting from "/*"
+            while (input[i] != '\0' && !(input[i] == '*' && input[i + 1] == '/')) {
+                putchar(input[i]);  // Print the comment character by character
+                i++;
+            }
+            // Print the ending "*/"
+            if (input[i] != '\0') {
+                putchar(input[i]);
+                putchar(input[i + 1]);
+                printf("\n");
+                i += 2;  // Skip past "*/"
+            } else {
+                // Handle case where "*/" is missing
+                printf("\nWarning: Comment not terminated properly.\n");
+                break;
+            }
+            return;
+        }
+        
+        // Move to next character
+        i++;
+    }
+}
+
+// Main function to read input and analyze
+int main() {
+    char input[1000];
+    
+    // Read input from user
+    printf("Enter a line of code: ");
+    fgets(input, sizeof(input), stdin);  // Read input with spaces
+    
+    // Call lexical analyzer to check comments
+    lexicalAnalyzer(input);
+
+    return 0;
+}
