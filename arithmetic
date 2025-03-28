@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <ctype.h>
+
+// Function to identify and print the token if it matches an operator
+void lexicalAnalyzer(char *input) {
+    int i = 0;
+    char ch;
+    
+    while ((ch = input[i]) != '\0') {
+        // Skip whitespace characters
+        if (isspace(ch)) {
+            i++;
+            continue;
+        }
+        
+        // Check for arithmetic operators and print them
+        switch (ch) {
+            case '+':
+                printf("Token: PLUS (+)\n");
+                break;
+            case '-':
+                printf("Token: MINUS (-)\n");
+                break;
+            case '*':
+                printf("Token: MULTIPLY (*)\n");
+                break;
+            case '/':
+                printf("Token: DIVIDE (/)\n");
+                break;
+            default:
+                printf("Invalid token: %c\n", ch);
+                break;
+        }
+        i++;  // Move to the next character
+    }
+}
+
+int main() {
+    char input[100];
+    
+    // Read input from user
+    printf("Enter an arithmetic expression: ");
+    fgets(input, sizeof(input), stdin);  // Reads input with spaces
+    
+    // Call lexical analyzer to process the input string
+    lexicalAnalyzer(input);
+
+    return 0;
+}
