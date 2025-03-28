@@ -1,0 +1,23 @@
+%{
+#include <stdio.h>
+int comment_count = 0;
+%}
+
+%%
+
+"//".*               { comment_count++; }             // Match single-line comments
+"/*"([^*]|\*+[^/])*"*/" { comment_count++; }          // Match multi-line comments
+.                    { putchar(yytext[0]); }          // Output all other characters
+\n                   { putchar('\n'); }               // Handle newlines
+
+%%
+
+int main() {
+    yylex();  // Run the lexical analyzer
+    printf("\nNumber of comment lines: %d\n", comment_count);
+    return 0;
+}
+
+int yywrap() {
+    return 1;
+}

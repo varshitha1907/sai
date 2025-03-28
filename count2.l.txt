@@ -1,0 +1,27 @@
+%{
+#include <stdio.h>
+
+int char_count = 0;
+int word_count = 0;
+int line_count = 0;
+%}
+
+%%
+
+\n              { line_count++; char_count++; }  // Increment line and character count
+[ \t]+          { char_count += yyleng; }        // Count whitespace characters but not words
+[^ \t\n]+       { word_count++; char_count += yyleng; } // Increment word count and character count
+
+%%
+
+int main() {
+    yylex();
+    printf("Number of characters: %d\n", char_count);
+    printf("Number of words: %d\n", word_count);
+    printf("Number of lines: %d\n", line_count);
+    return 0;
+}
+
+int yywrap() {
+    return 1;
+}
