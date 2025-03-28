@@ -1,0 +1,21 @@
+
+%{
+#include <stdio.h>
+%}
+
+%%
+
+[0-9]    { printf("It is a constant: %s\n", yytext); }
+.        { printf("Not a digit: %s\n", yytext); }
+
+%%
+
+int main() {
+    printf("Enter input (Ctrl+D to stop):\n");
+    yylex();
+    return 0;
+}
+
+int yywrap() {
+    return 1;
+}
