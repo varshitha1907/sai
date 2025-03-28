@@ -1,0 +1,17 @@
+%{
+int flag=0;
+%}
+%%
+[A-Z] {flag=1;}
+%%
+int main()
+{
+yylex();
+if(flag==1)
+printf("Is Capital");
+else
+printf("Is Not Capital");
+}
+int yywrap()
+{ return 1;
+}
