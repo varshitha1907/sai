@@ -1,0 +1,21 @@
+%{
+#include <stdio.h>
+
+%}
+
+%%
+
+oldword    { printf("newword"); }   // Replace occurrences of "oldword" with "newword"
+.|\n       { putchar(yytext[0]); }  // Print other characters as they are
+
+%%
+
+int main() {
+    printf("Enter text (Ctrl+D to stop):\n");
+    yylex();
+    return 0;
+}
+
+int yywrap() {
+    return 1;
+}
