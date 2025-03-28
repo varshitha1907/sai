@@ -1,0 +1,69 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+#define MAX_RULES 10
+#define MAX_SYMBOLS 20
+
+// Function to check if a string is a terminal (not a non-terminal)
+int isTerminal(char c) {
+    return !(c >= 'A' && c <= 'Z');
+}
+
+// Function to eliminate left recursion from a grammar
+void eliminateLeftRecursion(char grammar[MAX_RULES][MAX_SYMBOLS], int numRules) {
+    char newNonTerminal = 'A';  // New non-terminal for transformation
+    char temp[MAX_SYMBOLS];
+
+    for (int i = 0; i < numRules; i++) {
+        char leftNonTerminal = grammar[i][0];  // Left-hand side non-terminal
+        int hasLeftRecursion = 0;
+        
+        // Check if the rule has left recursion (i.e., A -> Aα)
+        if (grammar[i][2] == leftNonTerminal) {
+            hasLeftRecursion = 1;
+        }
+
+        if (hasLeftRecursion) {
+            // If left recursion is detected, we split the rule as described above
+            // Create new rules for the left recursion elimination
+            printf("%c -> ", leftNonTerminal);
+            for (int j = 3; grammar[i][j] != '\0'; j++) {
+                printf("%c", grammar[i][j]);
+            }
+            printf(" %c'\n", newNonTerminal); // A' rule
+            
+            // Create new non-terminal rules
+            printf("%c' -> ", newNonTerminal);
+            printf("%c", grammar[i][2]);  // α part of A -> Aα
+            printf(" %c' | ε\n", newNonTerminal);
+
+            // Increment new non-terminal for the next rule
+            newNonTerminal++;
+        } else {
+            // If no left recursion, we keep the rule as is
+            printf("%s\n", grammar[i]);
+        }
+    }
+}
+
+int main() {
+    char grammar[MAX_RULES][MAX_SYMBOLS];
+    int numRules;
+
+    // Input number of grammar rules
+    printf("Enter number of grammar rules: ");
+    scanf("%d", &numRules);
+
+    // Input the grammar rules
+    for (int i = 0; i < numRules; i++) {
+        printf("Enter rule %d (e.g., A->Ab|Bc): ", i + 1);
+        scanf("%s", grammar[i]);
+    }
+
+    // Apply left recursion elimination
+    printf("\nGrammar after eliminating left recursion:\n");
+    eliminateLeftRecursion(grammar, numRules);
+
+    return 0;
+}
